@@ -39,7 +39,7 @@ if($file = fopen($name_file, "r")) {
 			
 			$certificados[$i]=$linea_concatenada;
 			$data = openssl_x509_parse($linea_concatenada);
-		    // echo("<pre>");
+		    //echo("<pre>");
 			//print_r($data);
 			//echo("</pre>");
 			?>

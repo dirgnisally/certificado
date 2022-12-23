@@ -11,9 +11,9 @@
 		//echo("entre aqui");
 
 		$certificateInfo = getCertificateInfo( $host, $port );
-		echo("<pre>");
-		print_r($certificateInfo);
-		echo("</pre>");
+		///echo("<pre>");
+		//print_r($certificateInfo);
+		//echo("</pre>");
 		?>
 		<table border=1>
 		<tr> <td>Subject</td>

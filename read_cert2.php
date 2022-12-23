@@ -48,14 +48,14 @@ if($file = fopen($name_file, "r")) {
 				<?php 
 				//$validFrom = date('Y-m-d H:i:s', $data['validFrom_time_t']);
 				$validTo = date('Y-m-d H:i:s', $data['validTo_time_t']);
-				echo($validTo)
+				echo($validTo);
 				?></td>
 				<td><b>validFrom</b></td>
 				<td>
 				<?php 
 				$validFrom = date('Y-m-d H:i:s', $data['validFrom_time_t']);
 				//$validTo = date('Y-m-d H:i:s', $data['validTo_time_t']);
-				echo($validFrom)
+				echo($validFrom);
 				?></td>
 				
 				

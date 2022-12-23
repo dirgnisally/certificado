@@ -227,6 +227,10 @@ function getCertificateInfo( $server, $port = 443, $timeout = 5 ) {
 	// http://www.php.net/manual/de/function.openssl-pkey-get-public.php
 	$publicKey = openssl_pkey_get_public( $cert );
 	$publicKeyDetailsRaw = openssl_pkey_get_details( $publicKey );
+	//echo("<pre>");
+	//print_r($publicKeyDetailsRaw);
+	//echo("</pre>");
+	//print_r($publicKeyDetails);
 
 	$publicKeyDetails['subject-public-key-info']['rsa']['$'] = "Certificate -> Subject Public Key Info -> Subject's Public Key";
 	$publicKeyDetails['subject-public-key-info']['rsa']['base64'] = wordwrap( base64_encode( $publicKeyDetailsRaw['rsa']['n'] ), 64, "\r\n", true );

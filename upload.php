@@ -65,12 +65,13 @@ $filename="urls.txt";
 
 if($accion=='cargar'){
 	
-	if(isset($_REQUEST['url'])){
+	if($_REQUEST['url']){
 		$url = $_REQUEST['url'];
+		//echo($url);
 		$rpta = validarSintaxisUrl($url);
 		if($rpta){
 			$fpmy =fopen($filename, "a+");
-			$con = fwrite($fpmy,$url.PHP_EOL);
+			$con = fwrite($fpmy,$url."\n");
 			fclose($fpmy);
 			//$contents = fread($fp,filesize($filename));
 			//echo($contents);
@@ -91,10 +92,12 @@ if($accion=='cargar'){
 			echo("El archivo no subio correctamente");
 				
 		}
-		
+		//echo("ingrese");
 		while (!feof($fp)) {
-			 $url = fgets($fp);
-			 
+			$url = fgets($fp);
+			//echo($url);
+			//if($url==' '){
+			//echo("ok".$url);
 			 $rpta = validarSintaxisUrl($url);
 			 if($rpta){
 				//$rpta_validacion=validarCertificados($url);
@@ -103,13 +106,14 @@ if($accion=='cargar'){
 				fclose($fpmy);
 			 }
 			 else {
-				echo("<p style='color:red;'>El url es incorrecto: </p>".$url);
+				echo("<p style='color:red;'>El url es incorrectdddddo: </p>".$url);
 			}
-			
+			//}
 		}
 		
 		fclose($fp);
 	}
+	
 	
 	/* Leemos el archivo guardado de todos los url */
 	
@@ -123,6 +127,7 @@ if($accion=='cargar'){
 	<thead>
 		<tr>
 		<th width=50px> Link</th>
+		<th width=50px> Url</th>
 		<th> <img src="img/Microsoft_Edge_logo.png" alt="Microsoft Edge"> </th>
 		<th> <img src="img/firefox.png" alt="Microsoft Edge"></th>
 		<th> <img src="img/chrome.png" alt="Microsoft Edge"></th>
@@ -131,26 +136,82 @@ if($accion=='cargar'){
 	<?php
 	while (!feof($fp)) {
 		$url = fgets($fp);
-		//$rpta_validacion=validarCertificados($url);
 		?>
-			 
-			 <tr> 
+		<tr> 
 			 <td>
 			 <a href="get_cer_url_2.php?url=<?php echo($url) ?>"><img src="img/mas.png"> </a>
 			 </td>
 			 <td>
 			 <?php
 			 echo($url);
+			 ?>
+			 </td>
+			 <td>
+			  <?php
+				$rpta_validacion=validarCertificadoEdge($url);
 			 
-			//$array_urls[$i]= "hola";
-			?>
+			 if($rpta_validacion){
+			 ?>
+			 <img src="img/verde.png"> 
+			 <img src="img/verde.png">
+			 <img src="img/verde.png">
+			 <?php 
+			 }
+			 else {
+			 
+			 ?>
+			 <img src="img/verde.png"> 
+			 <img src="img/verde.png">
+			 <img src="img/blanco.png"> 
+			 <?php
+			 }
+			 ?>
+			 </td>
+			 <td>
+			  <?php
+				$rpta_validacion=validarCertificadofirefox($url);
+			 
+			 if($rpta_validacion){
+			 ?>
+			 <img src="img/verde.png"> 
+			 <img src="img/verde.png">
+			 <img src="img/verde.png">
+			 <?php 
+			 }
+			 else {
+			 
+			 ?>
+			 <img src="img/verde.png"> 
+			 <img src="img/verde.png">
+			 <img src="img/blanco.png"> 
+			 <?php
+			 }
+			 ?>
+			 </td>
+			 <td> 
+			 <?php
+			 $rpta_validacion=validarCertificadoChrome($url);
+			 if($rpta_validacion){
+			 ?>
+			 <img src="img/verde.png"> 
+			 <img src="img/verde.png">
+			 <img src="img/verde.png">
+			 <?php 
+			 }
+			 else {
+			 
+			 ?>
+			 <img src="img/verde.png"> 
+			 <img src="img/verde.png">
+			 <img src="img/blanco.png"> 
+			 <?php
+			 }
+			 ?>
 			 </td>
 			 </tr>
-			 
-			 <?php
+		<?php
 	}
 	fclose($fp);
-	
 	
 	
 }

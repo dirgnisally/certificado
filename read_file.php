@@ -54,7 +54,7 @@ if($file = fopen($name_file, "r")) {
 //$url="https://www.google.com";
 //is_ssl_exists($url);
 /* Conseguimos el url*/
-function validarCertificados($q){
+function validarCertificadofirefox($q){
 $output = "";
 //if ( isset( $_REQUEST['q'] ) && ( trim( $_REQUEST['q'] ) != "" ) ) {
 	
@@ -74,6 +74,14 @@ $output = "";
 		print_r($certificateInfo);
 		echo("</pre>");*/
 		
+		$validTo = date('Y-m-d H:i:s', $certificateInfo['validTo_time_t']);
+		//echo($certificateInfo['validFrom_time_t']);
+		$validFrom = date('Y-m-d H:i:s', $certificateInfo['validFrom_time_t']);
+		$date1 = new DateTime($validFrom);
+		$date2 = new DateTime($validTo);
+		$diff = $date1->diff($date2);
+		///echo ( $diff->days);
+		
 		$fingerPrints = $certificateInfo['x-fingerprints'];
 		$ts = date( "r", $certificateInfo['x-retrieval-time']['unix'] );
 		
@@ -91,9 +99,11 @@ $output = "";
 		echo("---");
 		echo($certificado_url2);
 		*/
-		$certificados_firefox =readCertificados("certificados/chrome_certificates.txt", $certificado_url);
-		
-		return 2;
+		$certificados_firefox =readCertificados("certificados/mozilla_certificates.txt", $certificado_url);
+		if($diff->days >=0){
+			return true;
+		}
+		else return false;
 		/*echo("<pre>");
 		print_r($certificados_firefox);
 		echo("</pre>");*/
@@ -108,7 +118,96 @@ $output = "";
 
 	$q = $host . ( ( $port != 443 ) ? ":$port" : "" );
 }
-//}
 
+function validarCertificadoChrome($q){
+$output = "";
+
+	$url = preg_replace( "!https?://!i", "", filter_var( $q, FILTER_SANITIZE_URL ) );
+	$parsedUrl = parse_url ( "https://" . $url );
+	$port = array_key_exists( 'port', $parsedUrl ) ? $parsedUrl['port'] : "443";
+	$host = $parsedUrl['host'];
+	//echo("ingrese");
+	if ( is_array( getCertificateInfo( $host, $port ) ) ) {
+		$certificateInfo = getCertificateInfo( $host, $port );
+		$validFrom = date('Y-m-d H:i:s', $certificateInfo['validFrom_time_t']);
+		$date1 = new DateTime($validFrom);
+		$date2 = new DateTime($validTo);
+		$diff = $date1->diff($date2);
+		///echo ( $diff->days);
+		
+		$fingerPrints = $certificateInfo['x-fingerprints'];
+		$ts = date( "r", $certificateInfo['x-retrieval-time']['unix'] );
+		
+
+		$certificado_url = $certificateInfo['x-certificate'] ['base64'];
+		$certificado_url2 = $certificateInfo['x-certificate'] ['hex'];
+		$certificados_firefox =readCertificados("certificados/chrome_certificates.txt", $certificado_url);
+		if($diff->days >=0){
+			return true;
+		}
+		else return false;
+		
+	}
+	else{
+	return false;
+	}
+
+	//$q = $host . ( ( $port != 443 ) ? ":$port" : "" );
+}
+//}
+function validarCertificadoEdge($q){
+$output = "";
+if ( isset( $_REQUEST['q'] ) && ( trim( $_REQUEST['q'] ) != "" ) ) {
+	
+	//echo("ingrese");
+	//$url = preg_replace( "!https?://!i", "", filter_var( $q, FILTER_SANITIZE_URL ) );
+	$parsedUrl = parse_url ( "https://" . $url );
+	$port = array_key_exists( 'port', $parsedUrl ) ? $parsedUrl['port'] : "443";
+	$host = $parsedUrl['host'];
+	
+	
+//echo($host."-".$port);
+	if ( is_array( getCertificateInfo( $host, $port ) ) ) {
+		//echo("entre aqui");
+
+		$certificateInfo = getCertificateInfo( $host, $port );
+		/*echo("<pre>");
+		print_r($certificateInfo);
+		echo("</pre>");*/
+		
+		$validTo = date('Y-m-d H:i:s', $certificateInfo['validTo_time_t']);
+		//echo($certificateInfo['validFrom_time_t']);
+		$validFrom = date('Y-m-d H:i:s', $certificateInfo['validFrom_time_t']);
+		$date1 = new DateTime($validFrom);
+		$date2 = new DateTime($validTo);
+		$diff = $date1->diff($date2);
+		///echo ( $diff->days);
+		
+		$fingerPrints = $certificateInfo['x-fingerprints'];
+		$ts = date( "r", $certificateInfo['x-retrieval-time']['unix'] );
+		
+
+		$certificado_url = $certificateInfo['x-certificate'] ['base64'];
+		$certificado_url2 = $certificateInfo['x-certificate'] ['hex'];
+		
+		$certificados_firefox =readCertificados("certificados/edge_certificates.txt", $certificado_url);
+		if($diff->days >=0){
+			return true;
+		}
+		else return false;
+		
+
+
+	} else {
+
+		// error
+		return false;
+		//$output = getCertificateInfo( $host, $port );
+
+	}
+
+	$q = $host . ( ( $port != 443 ) ? ":$port" : "" );
+}
+}
 
 ?>
